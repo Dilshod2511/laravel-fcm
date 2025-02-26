@@ -16,7 +16,7 @@ class NotificationController extends Controller
         return view('notification.show');
     }
 
-    public function send(Request $request)
+    public function send(Request $request): \Illuminate\Http\RedirectResponse
     {
         $params = $request->validate([
             'title' => 'required',
@@ -24,7 +24,13 @@ class NotificationController extends Controller
             'click_action' => 'nullable'
         ]);
 
-        $tokens = User::query()->whereNotNull('fcm_token')->select(['fcm_token'])->get()->pluck('fcm_token')->toArray();
+        $tokens = User::query()
+            ->whereNotNull('fcm_token')
+            ->select(['fcm_token'])
+            ->get()
+            ->pluck('fcm_token')
+            ->toArray();
+
         $data = [
             'title' => $params['title'],
             'body' => $params['body'],

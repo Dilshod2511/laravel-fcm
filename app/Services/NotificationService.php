@@ -13,7 +13,7 @@ class NotificationService
         $this->messaging = app('firebase.messaging');
     }
 
-    public function sendNotify(array $data, array $tokens)
+    public function sendNotify(array $data, array $tokens): void
     {
         $message =$this->cloudMessage->withData($data);
 
