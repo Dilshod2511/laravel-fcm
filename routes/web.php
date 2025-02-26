@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,11 +29,12 @@ Route::middleware('auth')->group(function () {
     })->name('upload.show');;
     Route::post('upload/file', function () {
         $file = request()->file('file');
+        $path = Storage::disk('s3')->put('/', $file);
 
-        // Fayl nomini olish
-        $fileName = $file->getClientOriginalName();
-        $file->storeAs('/', $fileName);
-        return redirect()->back();
+        // Yuklangan faylning to‘liq URL manzilini olish
+        $url = Storage::disk('s3')->url($path);
+
+        return response()->json(['path' => $path, 'url' => $url]);
     })->name('upload');;
 });
 
