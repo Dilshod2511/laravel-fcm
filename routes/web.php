@@ -22,6 +22,18 @@ Route::middleware('auth')->group(function () {
         Route::get('/notification/show', 'show')->name('notification.show');
         Route::post('/notification/send', 'send')->name('notification.send');
     }) ;
+
+    Route::get('upload/show', function () {
+        return view('upload.show');
+    })->name('upload.show');;
+    Route::post('upload/file', function () {
+        $file = request()->file('file');
+
+        // Fayl nomini olish
+        $fileName = $file->getClientOriginalName();
+        $file->storeAs('/', $fileName);
+        return redirect()->back();
+    })->name('upload');;
 });
 
 
