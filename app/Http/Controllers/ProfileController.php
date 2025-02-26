@@ -61,6 +61,7 @@ class ProfileController extends Controller
 
     public function updateFcmToken(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'fcm_token' => 'required|string'
         ]);
@@ -74,9 +75,9 @@ class ProfileController extends Controller
 
         $data = $request->all();
 
-        $request->user()->update([
-            'fcm_token' => $data['fcm_token']
-        ]);
+       $user = $request->user();
+       $user->fcm_token = $data['fcm_token'];
+       $user->save();
 
         return response()->noContent();
     }

@@ -33,13 +33,14 @@
             </main>
         </div>
         <script type="module">
+
             import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
             import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-messaging.js";
 
             const firebaseConfig = {
                 apiKey: "{{ firebase_config()['apiKey'] }}",
                 authDomain: "{{ firebase_config()['authDomain'] }}",
-                projectId: "{{ firebase_config()['projectId'] }}",
+                projectId: "{{ firebase_config()['project_id'] }}",
                 storageBucket: "{{ firebase_config()['storageBucket'] }}",
                 messagingSenderId: "{{ firebase_config()['messagingSenderId'] }}",
                 appId: "{{ firebase_config()['appId'] }}"
@@ -48,7 +49,8 @@
             const app = initializeApp(firebaseConfig);
             const messaging = getMessaging(app);
 
-            navigator.serviceWorker.register("sw.js").then(registration => {
+            navigator.serviceWorker.register("sw.js").then(async registration => {
+
                 getToken(messaging, {
                     serviceWorkerRegistration: registration,
                     vapidKey: "{{ firebase_config()['vapidKey'] }}"
@@ -63,6 +65,7 @@
                         // Prepare the data
                         const data = JSON.stringify({
                             fcm_token: currentToken,
+                            _method:"PUT"
                         });
 
                         // Send the request
